@@ -1,0 +1,22 @@
+{
+  "name": "commonlibrary",
+  "version": "1.0.0",
+  "description": "set of common functions for sc development and testing",
+  "main": "commonLibrary.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gazoblock/commonLibrary.git"
+  },
+  "author": "gazoblock",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gazoblock/commonLibrary/issues"
+  },
+  "homepage": "https://github.com/gazoblock/commonLibrary#readme",
+  "dependencies": {
+    "hardhat": "^2.12.2"
+  }
+}
