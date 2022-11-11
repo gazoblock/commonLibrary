@@ -1,5 +1,3 @@
-//24 oct 2022, add 'stealERC20'
-
 const { ethers, network } = require('hardhat')
 
 module.exports.toBN = (n, power = 18) => ethers.BigNumber.from(10).pow(power).mul(n)
