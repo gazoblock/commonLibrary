@@ -1,6 +1,6 @@
 {
 	"name": "@gazoblock/commonlibrary",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "set of common functions for sc development and testing",
 	"scripts": {
 	  "build": "npm pack"
@@ -10,14 +10,14 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gazoblock/commonLibrary.git"
+		"url": "git+https://github.com/gazoblock/commonlibrary.git"
 	},
 	"author": "gazoblock",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/gazoblock/commonLibrary/issues"
+		"url": "https://github.com/gazoblock/commonlibrary/issues"
 	},
-	"homepage": "https://github.com/gazoblock/commonLibrary#readme",
+	"homepage": "https://github.com/gazoblock/commonlibrary#readme",
 	"dependencies": {
 		"hardhat": "^2.12.2"
 	},
@@ -25,3 +25,4 @@
 		"@gazoblock:registry": "https://npm.pkg.github.com"
 	}
 }
+	
