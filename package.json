@@ -1,5 +1,5 @@
 {
-	"name": "commonlibrary",
+	"name": "@gazoblock/commonlibrary",
 	"version": "1.0.0",
 	"description": "set of common functions for sc development and testing",
 	"scripts": {
