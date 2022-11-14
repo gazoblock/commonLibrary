@@ -84,7 +84,7 @@ module.exports.installNewImplementation = async (proxyContractAddress, newImplem
 }
 
 module.exports.phoneBookOfERC20 = {
-    BSC: {
+    '56': {
         USDT:   '0x55d398326f99059fF775485246999027B3197955',
         WETH:   '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
         BSW:    '0x965F527D9159dCe6288a2219DB51fc6Eef120dD1',
