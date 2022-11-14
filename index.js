@@ -132,6 +132,7 @@ module.exports.phoneBookOfERC20 = {
         ETC:    '0x3d6545b08693dae087e957cb1180ee38b9e3c25e',
         GMT:    '0x3019bf2a2ef8040c242c9a4c5c4bd4c81678b2a1',
         DAR:    '0x23ce9e926048273ef83be0a3a8ba9cb6d45cd978',
-        MANA:   '0x26433c8127d9b4e9b71eaa15111df99ea2eeb2f8'
+        MANA:   '0x26433c8127d9b4e9b71eaa15111df99ea2eeb2f8',
+        VAI:    '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7'
     }
 }
