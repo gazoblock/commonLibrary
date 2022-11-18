@@ -1,4 +1,5 @@
 const { ethers, network } = require('hardhat')
+const fs = require('fs')
 
 module.exports.toBN = (n, power = 18) => ethers.BigNumber.from(10).pow(power).mul(n)
 
@@ -7,6 +8,10 @@ module.exports.numberLastBlock = async () => (await ethers.provider.getBlock('la
 module.exports.timeStampLastBlock = async () => (await ethers.provider.getBlock('latest')).timestamp
 
 module.exports.lastNonce = async address => await network.provider.send('eth_getTransactionCount', [address, 'latest'])
+
+module.exports.sleep = ms => new Promise(r => setTimeout(r, ms))
+
+module.exports.logToFile = (_text, _file = 'default.log') => fs.appendFile( _file, `${getDateAsText()}: ${_text}\r\n`, 'utf8', errorMessage => errorMessage && console.log(getDateAsText() + ': ' + errorMessage))
 
 module.exports.extractCost = (tx, additionalData = {}, COIN_PRICE = 275) => {
     const GAS_SPENT = +tx.gasUsed
@@ -29,7 +34,6 @@ module.exports.extractCost = (tx, additionalData = {}, COIN_PRICE = 275) => {
 
     return Object.assign(res, additionalData)
 }
-module.exports.sleep = ms => new Promise(r => setTimeout(r, ms))
 
 module.exports.passTime = async ms => {
     await network.provider.send('evm_increaseTime', [ms])
@@ -136,3 +140,40 @@ module.exports.phoneBookOfERC20 = {
         VAI:    '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7'
     }
 }
+
+module.exports.setToContractStorage = (contract, storageName = 'main') => {
+    const path = `${__dirname}/storedContracts/${storageName}.json`
+    let storedContracts = {}
+
+    try {
+        const file = fs.readFileSync(path, "utf8")
+        storedContracts = JSON.parse(file)
+    } catch (error) {
+        fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
+    }
+
+    console.log(path, storedContracts)
+}
+
+module.exports.getFromContractStorage = filters => {
+
+}
+
+function getContractJson(path) {
+    const fs = require('fs');
+    let rawdata = fs.readFileSync(path);
+    let data = JSON.parse(rawdata);
+    return data;
+}
+
+const getDateAsText = (_date = new Date()) => 
+        '['
+        + appendZeroToLength(_date.getFullYear(),  4) + '.'
+        + appendZeroToLength(_date.getMonth() + 1, 2) + '.'
+        + appendZeroToLength(_date.getDate(),      2) + '  '
+        + appendZeroToLength(_date.getHours(),     2) + ':'
+        + appendZeroToLength(_date.getMinutes(),   2) + ':'
+        + appendZeroToLength(_date.getSeconds(),   2)
+        + ']'
+
+const appendZeroToLength = (_value, _length) => `${_value}`.padStart(_length, 0)
