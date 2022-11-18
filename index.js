@@ -141,7 +141,7 @@ module.exports.phoneBookOfERC20 = {
     }
 }
 
-module.exports.setToContractStorage = (contract, storageName = 'main') => {
+module.exports.setToContractStorage = (contract, alias, storageName = 'main') => {
     const dir = './storedContracts'
     const path = `${dir}/${storageName}.json`
     let storedContracts = {}
@@ -154,7 +154,17 @@ module.exports.setToContractStorage = (contract, storageName = 'main') => {
         fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
     }
 
-    console.log(path, storedContracts)
+    const lastVersion = storedContract[alias] ? storedContract[alias] : storedContract[alias] = {}
+
+    storedContract[alias] = {
+        address: contract.address,
+        deployer: contract.signer.address,
+        chainId: contract.provider._network.chainId,
+        storingTime: new Date().toUTCString(),
+        history: [...lastVersion.history || [], contract.address]
+    }
+    
+    console.log(path, alias, storedContract[alias])
 }
 
 module.exports.getFromContractStorage = filters => {
