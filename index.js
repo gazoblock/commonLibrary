@@ -168,7 +168,7 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
     fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
 }
 
-module.exports.getFromContractStorage = filters => {
+module.exports.getFromContractStorage = (alias, storageName = 'main') => {
     const dir = './storedContracts'
     const path = `${dir}/${storageName}.json`
     let storedContracts = {}
