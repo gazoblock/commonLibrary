@@ -142,13 +142,15 @@ module.exports.phoneBookOfERC20 = {
 }
 
 module.exports.setToContractStorage = (contract, storageName = 'main') => {
-    const path = `${__dirname}/storedContracts/${storageName}.json`
+    const dir = './storedContracts'
+    const path = `${dir}/${storageName}.json`
     let storedContracts = {}
 
     try {
         const file = fs.readFileSync(path, "utf8")
         storedContracts = JSON.parse(file)
     } catch (error) {
+        fs.existsSync(dir) || fs.mkdirSync(dir)
         fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
     }
 
