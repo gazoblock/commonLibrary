@@ -147,7 +147,7 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
     let storedContracts = {}
 
     try {
-        const file = fs.readFileSync(path, "utf8")
+        const file = fs.readFileSync(path, 'utf8')
         storedContracts = JSON.parse(file)
     } catch (error) {
         fs.existsSync(dir) || fs.mkdirSync(dir)
@@ -161,7 +161,7 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
         deployer: contract.signer.address,
         chainId: contract.provider._network.chainId,
         storingTime: new Date().toUTCString(),
-        history: [...lastVersion.history || [], contract.address].filter( (value, index, self) => self.indexOf(value) === index )
+        history: [contract.address, ...lastVersion.history || []].filter( (value, index, self) => self.indexOf(value) === index )
     }
     
     console.log(path, alias, storedContracts[alias])
@@ -169,7 +169,19 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
 }
 
 module.exports.getFromContractStorage = filters => {
+    const dir = './storedContracts'
+    const path = `${dir}/${storageName}.json`
+    let storedContracts = {}
 
+    try {
+        const file = fs.readFileSync(path, 'utf8')
+        storedContracts = JSON.parse(file)
+    } catch (error) {
+        fs.existsSync(dir) || fs.mkdirSync(dir)
+        fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
+    }
+
+    return storedContracts[alias] ? storedContracts[alias] : storedContracts[alias] = {}
 }
 
 function getContractJson(path) {
