@@ -161,10 +161,11 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
         deployer: contract.signer.address,
         chainId: contract.provider._network.chainId,
         storingTime: new Date().toUTCString(),
-        history: [...lastVersion.history || [], contract.address]
+        history: [...lastVersion.history || [], contract.address].filter( (value, index, self) => self.indexOf(value) === index )
     }
     
     console.log(path, alias, storedContracts[alias])
+    fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
 }
 
 module.exports.getFromContractStorage = filters => {
