@@ -154,9 +154,9 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
         fs.writeFileSync(path, JSON.stringify(storedContracts, null, '\t'))
     }
 
-    const lastVersion = storedContract[alias] ? storedContract[alias] : storedContract[alias] = {}
+    const lastVersion = storedContracts[alias] ? storedContracts[alias] : storedContracts[alias] = {}
 
-    storedContract[alias] = {
+    storedContracts[alias] = {
         address: contract.address,
         deployer: contract.signer.address,
         chainId: contract.provider._network.chainId,
@@ -164,7 +164,7 @@ module.exports.setToContractStorage = (contract, alias, storageName = 'main') =>
         history: [...lastVersion.history || [], contract.address]
     }
     
-    console.log(path, alias, storedContract[alias])
+    console.log(path, alias, storedContracts[alias])
 }
 
 module.exports.getFromContractStorage = filters => {
