@@ -42,6 +42,7 @@ module.exports.passTime = async ms => {
 
 module.exports.getERC20From_forking = async (from, ERC20_address, howMuch = module.exports.toBN(1), to) => {
     await network.provider.request({method: 'hardhat_impersonateAccount', params: [from]})
+    await network.provider.send('hardhat_setBalance', [from, '0x10000000000000000000000000'])
     const ERC20_contract = new ethers.Contract(ERC20_address, ['function transfer(address,uint256) public'], await ethers.provider.getSigner(from))
     await ERC20_contract.transfer(to || (await ethers.getSigners())[0].address, howMuch)
     await network.provider.request({method: 'hardhat_stopImpersonatingAccount', params: [from]})
@@ -55,6 +56,7 @@ module.exports.getERC721From_forking = async (ERC721_address, tokenId = 1, to) =
     )
     const oldNftOwner_address = await ERC721_contract.ownerOf(tokenId)
     await network.provider.request({method: 'hardhat_impersonateAccount', params: [oldNftOwner_address]})
+    await network.provider.send('hardhat_setBalance', [oldNftOwner_address, '0x10000000000000000000000000'])
     await ERC721_contract.connect(await ethers.provider.getSigner(oldNftOwner_address))['transferFrom(address,address,uint256)'](
         oldNftOwner_address, 
         to || (await ethers.getSigners())[0].address, 
