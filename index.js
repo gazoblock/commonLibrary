@@ -202,3 +202,17 @@ const getDateAsText = (_date = new Date()) =>
         + ']'
 
 const appendZeroToLength = (_value, _length) => `${_value}`.padStart(_length, 0)
+
+//array filter that remove not unique elems
+const onlyUnique = (value, index, self) => self.indexOf(value) === index
+
+//like unwind aggregation in mongo
+const unwind = (key, objArray) => {
+    const res = []
+    objArray.forEach(obj => {
+        const { [key]: _, ...rest } = obj
+        res.push(...obj[key].map(val => ({ ...rest, [key]: val }))) 
+    })
+
+    return res
+}
