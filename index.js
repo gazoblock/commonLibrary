@@ -218,25 +218,25 @@ class MultiCaller{
 		{ "inputs": [], "name": "getLastBlockHash", "outputs": [{ "internalType": "bytes32", "name": "blockHash", "type": "bytes32" }], "stateMutability": "view", "type": "function" }
 	]
 
-	constructor(provider){
+	constructor(signer){
 		if (!ethers) throw new Error(`'ethers' need to be preinstalled`)
-		if (!provider._network) throw new Error(`'provider._network' in not defined`)
+		if (!signer.provider._network) throw new Error(`'provider._network' in not defined`)
 
 		this.multiCallContract = new ethers.Contract(
-			MultiCaller.multiCallAddresses[provider._network.chainId],
+			MultiCaller.multiCallAddresses[signer.provider._network.chainId],
 			MultiCaller.multiCallAbi,
-			provider
+			signer
 		)
 	}
 
 	static interface = new ethers.utils.Interface( MultiCaller.multiCallAbi )
 
 	aggregate = async calls => {
-		return await this.multiCallContract.aggregate(calls)
+		return this.multiCallContract.aggregate(calls)
 	}
 
 	aggregateStatic = async calls => {
-		return await this.multiCallContract.callStatic.aggregate(calls)
+		return this.multiCallContract.callStatic.aggregate(calls)
 	}
 }
 
