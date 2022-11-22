@@ -186,12 +186,61 @@ module.exports.getFromContractStorage = (alias, storageName = 'main') => {
     return storedContracts[alias] ? storedContracts[alias] : storedContracts[alias] = {}
 }
 
-function getContractJson(path) {
-    const fs = require('fs');
-    let rawdata = fs.readFileSync(path);
-    let data = JSON.parse(rawdata);
-    return data;
+class MultiCaller{
+	static multiCallAddresses = {
+		1: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
+		3: '0xF24b01476a55d635118ca848fbc7Dab69d403be3',
+		4: '0x42ad527de7d4e9d9d011ac45b31d8551f8fe9821',
+		5: '0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e',
+		42: '0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a',
+		56: '0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb',
+		66: '0x94fEadE0D3D832E4A05d459eBeA9350c6cDd3bCa',
+		97: '0x3A09ad1B8535F25b48e6Fa0CFd07dB6B017b31B2',
+		100: '0xb5b692a88bdfc81ca69dcb1d924f59f0413a602a',
+		128: '0x2C55D51804CF5b436BA5AF37bD7b8E5DB70EBf29',
+		137: '0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507',
+		250: '0x0118EF741097D0d3cc88e46233Da1e407d9ac139',
+		1337: '0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e',
+		31337: '0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb',//same as 56
+		42161: '0x813715eF627B01f4931d8C6F8D2459F26E19137E',
+		43114: '0x7f3aC7C283d7E6662D886F494f7bc6F1993cDacf',
+		80001: '0x08411ADd0b5AA8ee47563b146743C13b3556c9Cc',
+	}
+
+	static multiCallAbi = [
+		{ "inputs": [{ "components": [{ "internalType": "address", "name": "target", "type": "address" }, { "internalType": "bytes", "name": "callData", "type": "bytes" }], "internalType": "struct Multicall.Call[]", "name": "calls", "type": "tuple[]" }], "name": "aggregate", "outputs": [{ "internalType": "uint256", "name": "blockNumber", "type": "uint256" }, { "internalType": "bytes[]", "name": "returnData", "type": "bytes[]" }], "stateMutability": "nonpayable", "type": "function" }, 
+		{ "inputs": [{ "internalType": "uint256", "name": "blockNumber", "type": "uint256" }], "name": "getBlockHash", "outputs": [{ "internalType": "bytes32", "name": "blockHash", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, 
+		{ "inputs": [], "name": "getCurrentBlockCoinbase", "outputs": [{ "internalType": "address", "name": "coinbase", "type": "address" }], "stateMutability": "view", "type": "function" }, 
+		{ "inputs": [], "name": "getCurrentBlockDifficulty", "outputs": [{ "internalType": "uint256", "name": "difficulty", "type": "uint256" }], "stateMutability": "view", "type": "function" }, 
+		{ "inputs": [], "name": "getCurrentBlockGasLimit", "outputs": [{ "internalType": "uint256", "name": "gaslimit", "type": "uint256" }], "stateMutability": "view", "type": "function" }, 
+		{ "inputs": [], "name": "getCurrentBlockTimestamp", "outputs": [{ "internalType": "uint256", "name": "timestamp", "type": "uint256" }], "stateMutability": "view", "type": "function" }, 
+		{ "inputs": [{ "internalType": "address", "name": "addr", "type": "address" }], "name": "getEthBalance", "outputs": [{ "internalType": "uint256", "name": "balance", "type": "uint256" }], "stateMutability": "view", "type": "function" }, 
+		{ "inputs": [], "name": "getLastBlockHash", "outputs": [{ "internalType": "bytes32", "name": "blockHash", "type": "bytes32" }], "stateMutability": "view", "type": "function" }
+	]
+
+	constructor(provider){
+		if (!ethers) throw new Error(`'ethers' need to be preinstalled`)
+		if (!provider._network) throw new Error(`'provider._network' in not defined`)
+
+		this.multiCallContract = new ethers.Contract(
+			MultiCaller.multiCallAddresses[provider._network.chainId],
+			MultiCaller.multiCallAbi,
+			provider
+		)
+	}
+
+	static interface = new ethers.utils.Interface( MultiCaller.multiCallAbi )
+
+	aggregate = async calls => {
+		return await this.multiCallContract.aggregate(calls)
+	}
+
+	aggregateStatic = async calls => {
+		return await this.multiCallContract.callStatic.aggregate(calls)
+	}
 }
+
+module.exports.MultiCaller = MultiCaller
 
 const getDateAsText = (_date = new Date()) => 
         '['
